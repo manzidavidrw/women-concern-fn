@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { API_BASE_URL } from "@/src/lib/config";
 
-interface BackendLoginResponse {
+interface BackendRefreshResponse {
   access_token: string;
   refresh_token: string;
   token_type: string;
@@ -13,26 +13,31 @@ interface BackendLoginResponse {
   must_change_password: boolean;
 }
 
-export async function POST(request: Request) {
-  const payload = await request.json();
+export async function POST() {
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get("refresh_token")?.value;
 
-  const backendResponse = await fetch(`${API_BASE_URL}/auth/login`, {
+  if (!refreshToken) {
+    return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+  }
+
+  const backendResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ refresh_token: refreshToken }),
   });
 
   const data = await backendResponse.json();
 
   if (!backendResponse.ok) {
+    cookieStore.delete("refresh_token");
     return NextResponse.json(
-      { message: data?.message ?? "Invalid email or password" },
+      { message: data?.message ?? "Session expired" },
       { status: backendResponse.status },
     );
   }
 
-  const body = data as BackendLoginResponse;
-  const cookieStore = await cookies();
+  const body = data as BackendRefreshResponse;
 
   cookieStore.set("refresh_token", body.refresh_token, {
     httpOnly: true,

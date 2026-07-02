@@ -1,17 +1,63 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import { API_BASE_URL } from "@/src/lib/config";
+import { tokenStore } from "@/src/lib/tokenStore";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+axiosInstance.interceptors.request.use((config) => {
+  const token = tokenStore.getAccessToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+let refreshPromise: Promise<string | null> | null = null;
+
+function refreshAccessToken(): Promise<string | null> {
+  if (!refreshPromise) {
+    refreshPromise = fetch("/api/auth/refresh", { method: "POST", credentials: "include" })
+      .then(async (response) => {
+        if (!response.ok) return null;
+        const data = await response.json();
+        tokenStore.setAccessToken(data.access_token);
+        return data.access_token as string;
+      })
+      .catch(() => null)
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+}
+
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
+    const originalRequest = error.config as
+      | (InternalAxiosRequestConfig & { _retry?: boolean })
+      | undefined;
+
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const newToken = await refreshAccessToken();
+
+      if (newToken) {
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return axiosInstance(originalRequest);
+      }
+
+      tokenStore.setAccessToken(null);
+    }
+
     return Promise.reject(error);
   },
 );

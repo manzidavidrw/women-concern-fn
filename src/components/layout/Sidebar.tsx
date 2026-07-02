@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useLogout } from "@/src/hooks/useAuth";
 import { UserRole } from "@/src/services/authService";
 import { sidebarItems } from "./sidebarItems";
+import Button from "../shared/Button";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -63,15 +64,19 @@ export default function Sidebar({ isOpen, onClose, roles }: SidebarProps) {
         </nav>
 
         <div className="mt-auto border-t border-w-white/10 px-3 pt-3 pb-4">
-          <button
+          <Button
             type="button"
             onClick={() => logout()}
             disabled={isLoggingOut}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-w-white/90 transition-colors hover:bg-w-red/15 hover:text-w-red disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent disabled:hover:text-w-white/90"
+            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-w-white/90 transition-colors hover:bg-w-red/15  disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent disabled:hover:text-w-white/90"
           >
-            {isLoggingOut ? <Loader2 size={18} className="animate-spin" /> : <LogOut size={18} />}
+            {isLoggingOut ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : (
+              <LogOut size={18} />
+            )}
             {isLoggingOut ? "Logging out..." : "Logout"}
-          </button>
+          </Button>
         </div>
       </aside>
     </>

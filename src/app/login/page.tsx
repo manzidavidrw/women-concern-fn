@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Button from "@/src/components/shared/Button";
@@ -54,6 +54,7 @@ export default function LoginPage() {
           <Input
             label="Password"
             type="password"
+            icon={<Lock size={18} />}
             placeholder="Enter your password"
             requiredStar
             error={errors.password?.message}

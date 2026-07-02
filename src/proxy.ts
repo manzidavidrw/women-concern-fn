@@ -5,17 +5,19 @@ const protectedRoutes = ["/dashboard"];
 const publicOnlyRoutes = ["/login"];
 
 export function proxy(request: NextRequest) {
-  const accessToken = request.cookies.get("access_token")?.value;
+  // The access token only lives in browser memory now — the refresh token
+  // cookie is the only session signal the server can see.
+  const refreshToken = request.cookies.get("refresh_token")?.value;
   const { pathname } = request.nextUrl;
 
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
   const isPublicOnlyRoute = publicOnlyRoutes.some((route) => pathname.startsWith(route));
 
-  if (isProtectedRoute && !accessToken) {
+  if (isProtectedRoute && !refreshToken) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (isPublicOnlyRoute && accessToken) {
+  if (isPublicOnlyRoute && refreshToken) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

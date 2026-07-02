@@ -91,9 +91,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               ...(textColor ? { color: textColor } : {}),
               ...style,
             }}
-            className={`w-full rounded-md border border-w-black/20 bg-w-white py-2 text-w-black outline-none placeholder:text-w-black/40 focus:border-w-green ${
+            className={`w-full rounded-md border border-w-black/20 bg-w-white py-2 text-w-black outline-none placeholder:text-w-black/40 focus:border-2 focus:border-w-green ${
               icon ? "pl-10" : "pl-3"
-            } ${isPassword ? "pr-10" : "pr-3"} ${error ? "border-red-500" : ""} ${className}`}
+            }
+              ${className} ${isPassword ? "pr-10" : "pr-3"} ${error ? "border-w-red" : ""}`}
           />
           {isPassword && (
             <button
@@ -104,9 +105,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? (
-                <EyeOff size={18} className="text-w-green" />
+                <EyeOff size={18} className="text-w-green font-bold" />
               ) : (
-                <Eye size={18} className="text-w-green" />
+                <Eye size={18} className="text-w-green font-bold" />
               )}
             </button>
           )}

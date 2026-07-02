@@ -12,8 +12,9 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: (payload: LoginPayload) => authService.login(payload),
-    onSuccess: (user) => {
-      setUser(user);
+    onSuccess: async (user) => {
+      const currentUser = await authService.getCurrentUser().catch(() => null);
+      setUser(currentUser);
       toast.success("Logged in successfully");
       router.push(user.must_change_password ? "/change-password" : "/dashboard");
     },

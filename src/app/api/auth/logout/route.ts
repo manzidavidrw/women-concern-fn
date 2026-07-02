@@ -30,8 +30,8 @@ export async function POST() {
     }
   }
 
-  cookieStore.delete("access_token");
   cookieStore.delete("refresh_token");
+  cookieStore.delete("access_token");
 
   return NextResponse.json({ message });
 }
