@@ -1,4 +1,10 @@
-import { FileText, LayoutDashboard, LucideIcon, Settings, Users } from "lucide-react";
+import {
+  FileText,
+  LayoutDashboard,
+  LucideIcon,
+  Settings,
+  Users,
+} from "lucide-react";
 import { UserRole } from "@/src/services/authService";
 
 export interface SidebarItem {
@@ -14,7 +20,13 @@ export const sidebarItems: SidebarItem[] = [
     key: "dashboard",
     label: "Dashboard",
     link: "/dashboard",
-    roles: ["ADMIN", "EXECUTIVE_DIRECTOR", "PROJECT_MANAGER", "FINANCE", "FIELD_OFFICER"],
+    roles: [
+      "ADMIN",
+      "EXECUTIVE_DIRECTOR",
+      "PROJECT_MANAGER",
+      "FINANCE",
+      "FIELD_OFFICER",
+    ],
     icon: LayoutDashboard,
   },
   {
