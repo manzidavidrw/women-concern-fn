@@ -146,8 +146,8 @@ export default function ActionDropdown({
                 className={`flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${
                   item.disabled
                     ? "cursor-not-allowed text-w-black/40"
-                    : "text-w-black/80 hover:bg-w-green/5"
-                } ${item.className ?? ""}`}
+                    : (item.className ?? "text-w-black/80 hover:bg-w-green/5")
+                }`}
               >
                 <span className="shrink-0">{item.icon}</span>
                 <span className="flex-1">{item.label}</span>

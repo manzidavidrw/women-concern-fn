@@ -29,6 +29,20 @@ export interface FullUser {
 export interface GetUsersParams {
   page?: number;
   size?: number;
+  search?: string;
+  gender?: Gender;
+  active?: boolean;
+  role?: UserRole;
+}
+
+export interface RegisterUserPayload {
+  email: string;
+  firstName: string;
+  lastName: string;
+  gender: Gender;
+  phoneNumber: string;
+  role: UserRole;
+  joinedAt: string;
 }
 
 export const userService = {
@@ -40,5 +54,25 @@ export const userService = {
   getUser: async (id: string): Promise<FullUser> => {
     const response = await api.get<ApiEnvelope<FullUser>>(`/users/${id}`);
     return response.data;
+  },
+
+  registerUser: async (payload: RegisterUserPayload): Promise<string> => {
+    const response = await api.post<{ message: string }>("/auth/register", payload);
+    return response.message;
+  },
+
+  activateUser: async (id: string): Promise<string> => {
+    const response = await api.patch<ApiEnvelope<string>>(`/users/${id}/activate`);
+    return response.message;
+  },
+
+  deactivateUser: async (id: string): Promise<string> => {
+    const response = await api.patch<ApiEnvelope<string>>(`/users/${id}/deactivate`);
+    return response.message;
+  },
+
+  deleteUser: async (id: string): Promise<string> => {
+    const response = await api.delete<ApiEnvelope<string>>(`/users/${id}`);
+    return response.message;
   },
 };

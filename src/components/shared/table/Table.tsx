@@ -23,7 +23,8 @@ interface TableRowProps {
 }
 
 interface TableCellProps
-  extends TdHTMLAttributes<HTMLTableCellElement>,
+  extends
+    TdHTMLAttributes<HTMLTableCellElement>,
     ThHTMLAttributes<HTMLTableCellElement> {
   children: ReactNode;
   isHeader?: boolean;
@@ -47,7 +48,9 @@ export function Table({ children, className = "" }: TableProps) {
 
 export function TableHeader({ children, className = "" }: TableHeaderProps) {
   return (
-    <thead className={`select-none bg-w-green text-w-white ${className}`}>{children}</thead>
+    <thead className={`select-none bg-w-green text-w-white ${className}`}>
+      {children}
+    </thead>
   );
 }
 
@@ -55,7 +58,11 @@ export function TableBody({ children, className = "" }: TableBodyProps) {
   return <tbody className={className}>{children}</tbody>;
 }
 
-export function TableRow({ children, isHeader = false, className = "" }: TableRowProps) {
+export function TableRow({
+  children,
+  isHeader = false,
+  className = "",
+}: TableRowProps) {
   return (
     <tr
       className={`${isHeader ? "hover:bg-none" : "select-none hover:bg-w-green/5"} ${className}`}
@@ -74,8 +81,13 @@ export function TableCell({
   const CellTag = isHeader ? "th" : "td";
   const baseClasses =
     "border-b border-w-black/10 px-4 py-3 text-left align-middle text-sm text-w-black";
-  const headerClasses = "text-sm font-medium uppercase tracking-wider text-w-white";
-  const cellClasses = [baseClasses, isHeader ? headerClasses : "whitespace-nowrap", className]
+  const headerClasses =
+    "text-sm font-medium uppercase tracking-wider text-w-white";
+  const cellClasses = [
+    baseClasses,
+    isHeader ? headerClasses : "whitespace-nowrap",
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
 
