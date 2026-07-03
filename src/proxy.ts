@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const protectedRoutes = ["/dashboard"];
-const publicOnlyRoutes = ["/login"];
+const protectedRoutes = ["/dashboard", "/change-password"];
+const publicOnlyRoutes = ["/login", "/forgot-password", "/reset-password"];
 
 export function proxy(request: NextRequest) {
   // The access token only lives in browser memory now — the refresh token
@@ -31,5 +31,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/change-password", "/login", "/forgot-password", "/reset-password"],
 };

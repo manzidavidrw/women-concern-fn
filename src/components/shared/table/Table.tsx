@@ -39,7 +39,7 @@ interface RoleBadgeProps {
 export function Table({ children, className = "" }: TableProps) {
   return (
     <table
-      className={`w-full table-auto border-separate border-spacing-0 select-none overflow-hidden rounded-lg border border-w-black/10 ${className}`}
+      className={`w-full table-auto border-separate border-spacing-0  overflow-hidden rounded-lg border border-w-black/10 ${className}`}
     >
       {children}
     </table>
@@ -48,7 +48,7 @@ export function Table({ children, className = "" }: TableProps) {
 
 export function TableHeader({ children, className = "" }: TableHeaderProps) {
   return (
-    <thead className={`select-none bg-w-green text-w-white ${className}`}>
+    <thead className={` bg-w-green text-w-white ${className}`}>
       {children}
     </thead>
   );
@@ -65,7 +65,7 @@ export function TableRow({
 }: TableRowProps) {
   return (
     <tr
-      className={`${isHeader ? "hover:bg-none" : "select-none hover:bg-w-green/5"} ${className}`}
+      className={`${isHeader ? "hover:bg-none" : " hover:bg-w-green/5"} ${className}`}
     >
       {children}
     </tr>

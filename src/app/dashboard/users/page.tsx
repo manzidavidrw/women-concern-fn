@@ -1,7 +1,16 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Eye, Plus, RotateCcw, Search, Trash2, UserCheck, UserX } from "lucide-react";
+import {
+  Edit,
+  Eye,
+  Plus,
+  RotateCcw,
+  Search,
+  Trash2,
+  UserCheck,
+  UserX,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import Button from "@/src/components/shared/Button";
@@ -15,7 +24,11 @@ import { RoleBadge } from "@/src/components/shared/table/Table";
 import CreateUserModal from "@/src/components/users/CreateUserModal";
 import UserDetailModal from "@/src/components/users/UserDetailModal";
 import { useDebounce } from "@/src/hooks/useDebounce";
-import { useDeleteUser, useGetAllUsers, useToggleUserStatus } from "@/src/hooks/useUsers";
+import {
+  useDeleteUser,
+  useGetAllUsers,
+  useToggleUserStatus,
+} from "@/src/hooks/useUsers";
 import { useModal } from "@/src/hooks/useModal";
 import { UserRole } from "@/src/services/authService";
 import { FullUser, Gender } from "@/src/services/userService";
@@ -234,13 +247,11 @@ export default function UsersPage() {
           Reset
         </Button>
       </div>
-      <div
-        className={`transition-opacity ${isFetching && !isLoading ? "opacity-60" : "opacity-100"}`}
-      >
+      <div>
         <DataTable
           columns={columns}
           data={data?.content ?? []}
-          isLoading={isLoading}
+          isLoading={isLoading || isFetching}
           emptyMessage="No users found."
           pagination={
             data

@@ -70,7 +70,12 @@ export default function CreateUserModal({ isOpen, onClose }: CreateUserModalProp
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Add User">
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title="Add User"
+      closeOnBackdropClick={false}
+    >
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input

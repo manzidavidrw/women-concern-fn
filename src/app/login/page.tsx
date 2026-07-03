@@ -2,10 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail } from "lucide-react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Button from "@/src/components/shared/Button";
 import Input from "@/src/components/shared/Input";
+import Logo from "@/src/components/shared/Logo";
 import { useLogin } from "@/src/hooks/useAuth";
 import { useReloadOnBfcacheRestore } from "@/src/hooks/useReloadOnBfcacheRestore";
 
@@ -36,6 +38,7 @@ export default function LoginPage() {
         noValidate
         className="w-full max-w-sm rounded-lg border border-w-black/10 p-8 shadow-sm"
       >
+        <Logo className="mx-auto mb-6 w-22" />
         <h1 className="mb-1 text-2xl font-semibold text-w-green">
           Welcome back
         </h1>
@@ -62,11 +65,20 @@ export default function LoginPage() {
           />
         </div>
 
+        <div className="mt-2 text-right">
+          <Link
+            href="/forgot-password"
+            className="text-sm font-medium text-w-green hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
         <Button
           type="submit"
           variant="primary"
           disabled={isLoggingIn}
-          className="mt-6 w-full"
+          className="mt-4 w-full"
         >
           {isLoggingIn ? "Signing in..." : "Sign in"}
         </Button>

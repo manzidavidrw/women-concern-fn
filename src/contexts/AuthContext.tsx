@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { authService, CurrentUser } from "@/src/services/authService";
 
@@ -15,6 +16,8 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     // tokenStore already hydrated the access token from its cookie at module
@@ -23,9 +26,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // cookie and retries, so we don't need to force a refresh on every mount.
     authService
       .getCurrentUser()
-      .then(setUser)
+      .then((currentUser) => {
+        setUser(currentUser);
+
+        if (currentUser.mustChangePassword && pathname !== "/change-password") {
+          router.replace("/change-password");
+        }
+      })
       .catch(() => setUser(null))
       .finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const logout = () => setUser(null);

@@ -3,6 +3,7 @@
 import { Loader2, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "@/src/components/shared/Logo";
 import { useLogout } from "@/src/hooks/useAuth";
 import { UserRole } from "@/src/services/authService";
 import { sidebarItems } from "./sidebarItems";
@@ -38,10 +39,12 @@ export default function Sidebar({ isOpen, onClose, roles }: SidebarProps) {
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex h-16 items-center px-6 text-lg font-semibold text-w-gold">
-          Women Concern
+        <div className="flex flex-col items-center border-b border-w-white/10 px-6 py-4">
+          <div className="rounded-lg bg-w-white px-4 py-2 shadow-sm">
+            <Logo className="w-28" />
+          </div>
         </div>
-        <nav className="flex flex-col gap-1 px-3">
+        <nav className="flex flex-col gap-1 px-3 pt-3">
           {items.map((item) => {
             const isActive = pathname === item.link;
             const Icon = item.icon;

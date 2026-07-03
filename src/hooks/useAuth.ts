@@ -4,7 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuthContext } from "@/src/contexts/AuthContext";
-import { authService, LoginPayload } from "@/src/services/authService";
+import {
+  authService,
+  ForgotPasswordPayload,
+  LoginPayload,
+  ResetPasswordPayload,
+} from "@/src/services/authService";
 
 export function useLogin() {
   const router = useRouter();
@@ -20,6 +25,48 @@ export function useLogin() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "Invalid email or password");
+    },
+  });
+}
+
+export function useResetPassword() {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (payload: ResetPasswordPayload) => authService.resetPassword(payload),
+    onSuccess: (message) => {
+      toast.success(message || "Password changed successfully");
+      router.push("/dashboard");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to reset password");
+    },
+  });
+}
+
+export function usePublicResetPassword() {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (payload: ResetPasswordPayload) => authService.resetPassword(payload),
+    onSuccess: (message) => {
+      toast.success(message || "Password reset successfully. Please log in.");
+      router.push("/login");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to reset password");
+    },
+  });
+}
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (payload: ForgotPasswordPayload) => authService.forgotPassword(payload),
+    onSuccess: (message) => {
+      toast.success(message || "If an account exists for that email, a reset link has been sent");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to send reset email");
     },
   });
 }
