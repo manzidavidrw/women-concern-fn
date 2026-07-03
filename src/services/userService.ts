@@ -47,7 +47,9 @@ export interface RegisterUserPayload {
 
 export const userService = {
   getUsers: async (params?: GetUsersParams): Promise<Page<FullUser>> => {
-    const response = await api.get<ApiEnvelope<Page<FullUser>>>("/users", { params });
+    const response = await api.get<ApiEnvelope<Page<FullUser>>>("/users", {
+      params,
+    });
     return response.data;
   },
 
@@ -57,17 +59,24 @@ export const userService = {
   },
 
   registerUser: async (payload: RegisterUserPayload): Promise<string> => {
-    const response = await api.post<{ message: string }>("/auth/register", payload);
+    const response = await api.post<{ message: string }>(
+      "/users/register",
+      payload,
+    );
     return response.message;
   },
 
   activateUser: async (id: string): Promise<string> => {
-    const response = await api.patch<ApiEnvelope<string>>(`/users/${id}/activate`);
+    const response = await api.patch<ApiEnvelope<string>>(
+      `/users/${id}/activate`,
+    );
     return response.message;
   },
 
   deactivateUser: async (id: string): Promise<string> => {
-    const response = await api.patch<ApiEnvelope<string>>(`/users/${id}/deactivate`);
+    const response = await api.patch<ApiEnvelope<string>>(
+      `/users/${id}/deactivate`,
+    );
     return response.message;
   },
 

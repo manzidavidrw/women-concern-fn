@@ -1,4 +1,5 @@
 import api from "@/src/lib/apiClient";
+import { ApiEnvelope } from "@/src/lib/apiTypes";
 import { tokenStore } from "@/src/lib/tokenStore";
 
 export type UserRole =
@@ -11,6 +12,16 @@ export type UserRole =
 export interface LoginPayload {
   email: string;
   password: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ForgotPasswordPayload {
+  email: string;
 }
 
 export interface SessionUser {
@@ -40,6 +51,7 @@ export interface CurrentUser {
   nationalId: string | null;
   profilePictureUrl: string | null;
   active: boolean;
+  mustChangePassword: boolean;
 }
 
 async function bootstrapSession(response: Response): Promise<SessionUser> {
@@ -80,4 +92,20 @@ export const authService = {
   },
 
   getCurrentUser: (): Promise<CurrentUser> => api.get<CurrentUser>("/auth/me"),
+
+  resetPassword: async (payload: ResetPasswordPayload): Promise<string> => {
+    const response = await api.post<ApiEnvelope<{ message: string }>>(
+      "/auth/reset-password",
+      payload,
+    );
+    return response.message;
+  },
+
+  forgotPassword: async (payload: ForgotPasswordPayload): Promise<string> => {
+    const response = await api.post<ApiEnvelope<{ message: string }>>(
+      "/auth/forgot-password",
+      payload,
+    );
+    return response.message;
+  },
 };
