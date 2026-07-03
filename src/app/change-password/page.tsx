@@ -2,16 +2,18 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import Button from "@/src/components/shared/Button";
 import Input from "@/src/components/shared/Input";
 import Logo from "@/src/components/shared/Logo";
-import { useResetPassword } from "@/src/hooks/useAuth";
-import { tokenStore } from "@/src/lib/tokenStore";
+import { useChangePassword } from "@/src/hooks/useAuth";
 
 const changePasswordSchema = z
   .object({
+    currentPassword: z.string().min(1, "Current password is required"),
     newPassword: z.string().min(8, "Password must be at least 8 characters long"),
     confirmPassword: z.string().min(8, "Password must be at least 8 characters long"),
   })
@@ -23,7 +25,8 @@ const changePasswordSchema = z
 type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 
 export default function ChangePasswordPage() {
-  const { mutate: resetPassword, isPending } = useResetPassword();
+  const router = useRouter();
+  const { mutate: changePassword, isPending } = useChangePassword();
   const {
     register,
     handleSubmit,
@@ -31,10 +34,14 @@ export default function ChangePasswordPage() {
   } = useForm<ChangePasswordFormValues>({ resolver: zodResolver(changePasswordSchema) });
 
   const onSubmit = (values: ChangePasswordFormValues) => {
-    resetPassword({
-      token: tokenStore.getAccessToken() ?? "",
-      newPassword: values.newPassword,
-      confirmPassword: values.confirmPassword,
+    changePassword(values, {
+      onSuccess: (message) => {
+        toast.success(message || "Password changed successfully");
+        router.push("/dashboard");
+      },
+      onError: (error: Error) => {
+        toast.error(error.message || "Failed to change password");
+      },
     });
   };
 
@@ -52,6 +59,15 @@ export default function ChangePasswordPage() {
         </p>
 
         <div className="flex flex-col gap-4">
+          <Input
+            label="Current Password"
+            type="password"
+            icon={<Lock size={18} />}
+            placeholder="Enter current password"
+            requiredStar
+            error={errors.currentPassword?.message}
+            {...register("currentPassword")}
+          />
           <Input
             label="New Password"
             type="password"

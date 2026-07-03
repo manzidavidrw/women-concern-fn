@@ -6,9 +6,11 @@ import { toast } from "sonner";
 import { useAuthContext } from "@/src/contexts/AuthContext";
 import {
   authService,
+  ChangePasswordPayload,
   ForgotPasswordPayload,
   LoginPayload,
   ResetPasswordPayload,
+  UpdateProfilePayload,
 } from "@/src/services/authService";
 
 export function useLogin() {
@@ -29,26 +31,12 @@ export function useLogin() {
   });
 }
 
-export function useResetPassword() {
-  const router = useRouter();
-
-  return useMutation({
-    mutationFn: (payload: ResetPasswordPayload) => authService.resetPassword(payload),
-    onSuccess: (message) => {
-      toast.success(message || "Password changed successfully");
-      router.push("/dashboard");
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || "Failed to reset password");
-    },
-  });
-}
-
 export function usePublicResetPassword() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (payload: ResetPasswordPayload) => authService.resetPassword(payload),
+    mutationFn: ({ token, ...payload }: ResetPasswordPayload & { token: string }) =>
+      authService.resetPassword(payload, token),
     onSuccess: (message) => {
       toast.success(message || "Password reset successfully. Please log in.");
       router.push("/login");
@@ -67,6 +55,23 @@ export function useForgotPassword() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to send reset email");
+    },
+  });
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: (payload: ChangePasswordPayload) => authService.changePassword(payload),
+  });
+}
+
+export function useUpdateProfile() {
+  const { setUser } = useAuthContext();
+
+  return useMutation({
+    mutationFn: (payload: UpdateProfilePayload) => authService.updateProfile(payload),
+    onSuccess: (updatedUser) => {
+      setUser(updatedUser);
     },
   });
 }

@@ -38,11 +38,15 @@ interface RoleBadgeProps {
 
 export function Table({ children, className = "" }: TableProps) {
   return (
-    <table
-      className={`w-full table-auto border-separate border-spacing-0  overflow-hidden rounded-lg border border-w-black/10 ${className}`}
-    >
-      {children}
-    </table>
+    <div className="overflow-hidden rounded-lg border border-w-black/10">
+      <div className="overflow-x-auto">
+        <table
+          className={`w-full table-auto border-separate border-spacing-0 ${className}`}
+        >
+          {children}
+        </table>
+      </div>
+    </div>
   );
 }
 

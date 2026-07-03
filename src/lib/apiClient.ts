@@ -4,9 +4,6 @@ import { tokenStore } from "@/src/lib/tokenStore";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 axiosInstance.interceptors.request.use((config) => {

@@ -37,9 +37,18 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 
       {user && (
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-w-gold text-sm font-semibold text-w-black">
-            {initials}
-          </div>
+          {user.profilePictureUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- external/unknown host, avoid next/image remotePatterns coupling
+            <img
+              src={user.profilePictureUrl}
+              alt={displayName}
+              className="h-12 w-12 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-w-gold text-sm font-semibold text-w-black">
+              {initials}
+            </div>
+          )}
           <div className="hidden sm:block">
             <p className="text-sm  text-w-black font-bold">{displayName}</p>
             <p className="text-xs capitalize text-w-black/60">

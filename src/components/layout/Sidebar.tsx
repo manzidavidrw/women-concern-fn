@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, LogOut } from "lucide-react";
+import { Loader2, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/src/components/shared/Logo";
@@ -35,16 +35,17 @@ export default function Sidebar({ isOpen, onClose, roles }: SidebarProps) {
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 transform flex-col bg-w-green transition-transform duration-200 ease-in-out md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 transform flex-col bg-w-green transition-transform duration-200 ease-in-out md:sticky md:inset-y-auto md:top-0 md:h-screen md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-col items-center border-b border-w-white/10 px-6 py-4">
+        <div className="flex shrink-0 flex-col items-center px-6 py-4">
           <div className="rounded-lg bg-w-white px-4 py-2 shadow-sm">
             <Logo className="w-28" />
           </div>
         </div>
-        <nav className="flex flex-col gap-1 px-3 pt-3">
+
+        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto border-t border-w-white/10 px-3 pt-3">
           {items.map((item) => {
             const isActive = pathname === item.link;
             const Icon = item.icon;
@@ -66,7 +67,21 @@ export default function Sidebar({ isOpen, onClose, roles }: SidebarProps) {
           })}
         </nav>
 
-        <div className="mt-auto border-t border-w-white/10 px-3 pt-3 pb-4">
+        <div className="px-3 pt-3">
+          <Link
+            href="/dashboard/profile"
+            onClick={onClose}
+            className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              pathname === "/dashboard/profile"
+                ? "bg-w-gold text-w-black"
+                : "text-w-white/90 hover:bg-w-white/10"
+            }`}
+          >
+            <UserRound size={18} />
+            Profile
+          </Link>
+        </div>
+        <div className="mt-3 shrink-0 border-t border-w-white/10 px-3 pt-3 pb-4">
           <Button
             type="button"
             onClick={() => logout()}

@@ -13,55 +13,13 @@ import {
   Phone,
   UserRound,
 } from "lucide-react";
-import { ReactNode } from "react";
+import { DetailRow, Section } from "@/src/components/shared/DetailView";
 import Modal from "@/src/components/shared/Modal";
 import WBadge from "@/src/components/shared/WBadge";
 import WLoader from "@/src/components/shared/WLoader";
 import { RoleBadge } from "@/src/components/shared/table/Table";
 import { useUser } from "@/src/hooks/useUsers";
-
-function formatDate(value?: string) {
-  if (!value) return "—";
-  return new Date(value).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
-function formatDateTime(value?: string) {
-  if (!value) return "—";
-  return new Date(value).toLocaleString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
-
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <div className="border-t border-w-black/10 pt-4 first:border-t-0 first:pt-0">
-      <h4 className="mb-3 text-xs font-semibold tracking-wider text-w-green uppercase">{title}</h4>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">{children}</div>
-    </div>
-  );
-}
-
-function DetailRow({ icon, label, value }: { icon: ReactNode; label: string; value: ReactNode }) {
-  return (
-    <div className="flex items-start gap-3">
-      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-w-green/10 text-w-green">
-        {icon}
-      </span>
-      <div className="min-w-0">
-        <p className="text-xs font-medium text-w-black/50">{label}</p>
-        <p className="truncate text-sm text-w-black">{value || "—"}</p>
-      </div>
-    </div>
-  );
-}
+import { formatDate, formatDateTime } from "@/src/lib/formatDate";
 
 interface UserDetailModalProps {
   userId: string | null;
